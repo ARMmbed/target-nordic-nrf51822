@@ -1,6 +1,6 @@
 {
   "name": "nordic-nrf51822-16k-gcc",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Official mbed build target for the mbed nrf51822 development board, using the armgcc toolchain.",
   "licenses": [
     {
@@ -26,8 +26,6 @@
     "cortex-m0",
     "armv6-m"
   ],
-  "config": {
-  },
   "toolchain": "CMake/toolchain.cmake",
   "scripts": {
     "debug": [
