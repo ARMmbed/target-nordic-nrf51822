@@ -5,13 +5,12 @@ if(TARGET_NORDIC_NRF51822_GCC_TOOLCHAIN_INCLUDED)
 endif()
 set(TARGET_NORDIC_NRF51822_GCC_TOOLCHAIN_INCLUDED 1)
 
+# legacy definitions for building mbed 2.0 modules with a retrofitted build
+# system:
+set(MBED_LEGACY_TARGET_DEFINITIONS "NORDIC" "NRF51822_MKIT" "MCU_NRF51822" "MCU_NORDIC_16K")
 # provide compatibility definitions for compiling with this target: these are
-# definitions that legacy code assumes will be defined. Before adding something
-# here, think VERY CAREFULLY if you can't change anywhere that relies on the
-# definition that you're about to add to rely on the TARGET_LIKE_XXX
-# definitions that yotta provides based on the target.json file.
-#
-set(YOTTA_TARGET_DEFINITIONS "-DNRF51 -DTARGET_NORDIC -DTARGET_M0 -D__MBED__=1 -DMCU_NORDIC_16K -DTARGET_NRF51822 -DTARGET_MCU_NORDIC_16K -DTOOLCHAIN_GCC -DTOOLCHAIN_GCC_ARM -DMBED_OPERATORS")
+# definitions that legacy code assumes will be defined. 
+add_definitions("-DNRF51 -DTARGET_NORDIC -DTARGET_M0 -D__MBED__=1 -DMCU_NORDIC_16K -DTARGET_NRF51822 -DTARGET_MCU_NORDIC_16K")
 
 # append non-generic flags, and set NRF51822-specific link script
 
