@@ -22,6 +22,22 @@ set(CMAKE_CXX_FLAGS_INIT           "${CMAKE_CXX_FLAGS_INIT} ${_CPU_COMPILATION_O
 set(CMAKE_MODULE_LINKER_FLAGS_INIT "${CMAKE_MODULE_LINKER_FLAGS_INIT} -mcpu=cortex-m0 -mthumb")
 set(CMAKE_EXE_LINKER_FLAGS_INIT    "${CMAKE_EXE_LINKER_FLAGS_INIT} -mcpu=cortex-m0 -mthumb -T${CMAKE_CURRENT_LIST_DIR}/../ld/NRF51822.ld -fno-rtti -fno-threadsafe-statics --specs=nano.specs")
 
-# post-process elf files into .bin files:
-# TODO: merge hex files here
-set(YOTTA_POSTPROCESS_COMMAND "arm-none-eabi-objcopy -O ihex YOTTA_CURRENT_EXE_NAME YOTTA_CURRENT_EXE_NAME.hex && srec_cat /home/rgrover/play/mbed-src/libraries/mbed/targets/hal/TARGET_NORDIC/TARGET_MCU_NRF51822/Lib/s130_nrf51822_1_0_0/s130_nrf51_1.0.0_softdevice.hex -intel YOTTA_CURRENT_EXE_NAME.hex -intel -o combined.hex -intel")
+# used by the apply_target_rules function below:
+set(NRF51822_SOFTDEVICE_HEX_FILE "${CMAKE_CURRENT_LIST_DIR}/../softdevice/s130_nrf51_1.0.0_softdevice.hex")
+
+# define a function for yotta to apply target-specific rules to build products,
+# in our case we need to convert the built elf file to .hex, and add the
+# pre-built softdevice:
+function(yotta_apply_target_rules target_type target_name)
+    if(${target_type} STREQUAL "EXECUTABLE")
+        add_custom_command(TARGET ${target_name}
+            POST_BUILD
+            # objcopy to hex
+            COMMAND arm-none-eabi-objcopy -O ihex ${target_name} ${target_name}.hex
+            # and append the softdevice hex file
+            COMMAND srec_cat ${NRF51822_SOFTDEVICE_HEX_FILE} -intel ${target_name}.hex -intel -o ${target_name}-combined.hex -intel --line-length=44
+            COMMENT "hexifying and adding softdevice to ${target_name}"
+            VERBATIM
+        )
+    endif()
+endfunction()
