@@ -24,19 +24,9 @@
     "nrf",
     "nordic",
     "cortex-m0",
-    "armv6-m",
-    "arm",
-    "mbed"
+    "armv6-m"
   ],
-  "config": {
-  },
   "toolchain": "CMake/toolchain.cmake",
-  "debug": [
-    "valinor",
-    "--target",
-    "NRF51822",
-    "$program"
-  ],
   "scripts": {
     "debug": [
       "valinor",

@@ -8,6 +8,9 @@
       "type": "Apache-2.0"
     }
   ],
+  "inherits": {
+    "mbed-gcc": "*"
+  },
   "keywords": [
     "mbed-target:nrf51822",
     "mbed-official",
@@ -15,6 +18,7 @@
     "nordic",
     "gcc"
   ],
+  "config": {},
   "similarTo": [
     "nrf51822",
     "nrf",
