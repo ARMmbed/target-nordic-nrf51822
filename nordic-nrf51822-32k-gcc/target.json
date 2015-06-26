@@ -1,0 +1,40 @@
+{
+  "name": "nordic-nrf51822-32k-gcc",
+  "version": "0.0.2",
+  "description": "Official mbed build target for the nrf51822 32KB chip.",
+  "licenses": [
+    {
+      "url": "https://spdx.org/licenses/Apache-2.0",
+      "type": "Apache-2.0"
+    }
+  ],
+  "keywords": [
+    "mbed-target:nrf51822",
+    "mbed-official",
+    "nrf51822",
+    "nordic",
+    "gcc"
+  ],
+  "similarTo": [
+    "nrf51822",
+    "nrf",
+    "nordic",
+    "cortex-m0",
+    "armv7-m"
+  ],
+  "toolchain": "CMake/toolchain.cmake",
+  "scripts": {
+    "debug": [
+      "valinor",
+      "--target",
+      "NRF51822",
+      "$program"
+    ],
+    "test": [
+      "mbed_test_wrapper",
+      "--target",
+      "NRF51822",
+      "$program"
+    ]
+  }
+}
