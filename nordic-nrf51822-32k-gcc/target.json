@@ -24,7 +24,7 @@
     "nrf",
     "nordic",
     "cortex-m0",
-    "armv7-m"
+    "armv6-m"
   ],
   "toolchain": "CMake/toolchain.cmake",
   "scripts": {
