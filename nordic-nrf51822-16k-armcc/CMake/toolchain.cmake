@@ -33,8 +33,8 @@ function(yotta_apply_target_rules target_type target_name)
         # do this? (instead of needing binutils' objcopy)
         add_custom_command(TARGET ${target_name}
             POST_BUILD
-            # objcopy to hex
-            COMMAND arm-none-eabi-objcopy -O ihex ${target_name} ${target_name}.hex
+            # fromelf to hex
+            COMMAND fromelf --i32 --output=${target_name}.hex ${target_name}
             # and append the softdevice hex file
             COMMAND srec_cat ${NRF51822_SOFTDEVICE_HEX_FILE} -intel ${target_name}.hex -intel -o ${target_name}-combined.hex -intel --line-length=44
             COMMENT "hexifying and adding softdevice to ${target_name}"
