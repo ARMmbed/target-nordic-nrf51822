@@ -38,8 +38,8 @@ function(yotta_apply_target_rules target_type target_name)
             COMMAND fromelf --i32combined --output=${target_name}.hex ${target_name}
             # and append the softdevice hex file
             COMMAND srec_cat ${NRF51822_SOFTDEVICE_HEX_FILE} -intel ${target_name}.hex -intel -o ${target_name}-combined.hex -intel --line-length=44
-            COMMENT "hexifying and adding softdevice to ${target_name}"
             COMMAND srec_info ${target_name}-combined.hex -intel
+            COMMENT "hexifying and adding softdevice to ${target_name}"
             VERBATIM
         )
     endif()
