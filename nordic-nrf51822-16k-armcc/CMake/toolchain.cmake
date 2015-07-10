@@ -9,7 +9,7 @@ set(TARGET_NORDIC_NRF51822_16K_ARMCC_TOOLCHAIN_INCLUDED 1)
 # system:
 set(MBED_LEGACY_TARGET_DEFINITIONS "NORDIC" "NRF51822_MKIT" "MCU_NRF51822" "MCU_NORDIC_16K")
 # provide compatibility definitions for compiling with this target: these are
-# definitions that legacy code assumes will be defined. 
+# definitions that legacy code assumes will be defined.
 add_definitions("-DNRF51 -DTARGET_NORDIC -DTARGET_M0 -D__MBED__=1 -DMCU_NORDIC_16K -DTARGET_NRF51822 -DTARGET_MCU_NORDIC_16K -D__CORTEX_M0 -DARM_MATH_CM0")
 
 # append non-generic flags, and set NRF51822-specific link script
@@ -33,10 +33,12 @@ function(yotta_apply_target_rules target_type target_name)
         # do this? (instead of needing binutils' objcopy)
         add_custom_command(TARGET ${target_name}
             POST_BUILD
+            COMMAND arm-none-eabi-size ${target_name}
             # fromelf to hex
-            COMMAND fromelf --i32 --output=${target_name}.hex ${target_name}
+            COMMAND fromelf --i32combined --output=${target_name}.hex ${target_name}
             # and append the softdevice hex file
             COMMAND srec_cat ${NRF51822_SOFTDEVICE_HEX_FILE} -intel ${target_name}.hex -intel -o ${target_name}-combined.hex -intel --line-length=44
+            COMMAND srec_info ${target_name}-combined.hex -intel
             COMMENT "hexifying and adding softdevice to ${target_name}"
             VERBATIM
         )
