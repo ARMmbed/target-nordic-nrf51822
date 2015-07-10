@@ -9,7 +9,7 @@ set(TARGET_NORDIC_NRF51822_16K_ARMCC_TOOLCHAIN_INCLUDED 1)
 # system:
 set(MBED_LEGACY_TARGET_DEFINITIONS "NORDIC" "NRF51822_MKIT" "MCU_NRF51822" "MCU_NORDIC_16K")
 # provide compatibility definitions for compiling with this target: these are
-# definitions that legacy code assumes will be defined. 
+# definitions that legacy code assumes will be defined.
 add_definitions("-DNRF51 -DTARGET_NORDIC -DTARGET_M0 -D__MBED__=1 -DMCU_NORDIC_16K -DTARGET_NRF51822 -DTARGET_MCU_NORDIC_16K -D__CORTEX_M0 -DARM_MATH_CM0")
 
 # append non-generic flags, and set NRF51822-specific link script
