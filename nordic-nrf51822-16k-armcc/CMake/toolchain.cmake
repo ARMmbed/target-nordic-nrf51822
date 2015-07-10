@@ -33,6 +33,7 @@ function(yotta_apply_target_rules target_type target_name)
         # do this? (instead of needing binutils' objcopy)
         add_custom_command(TARGET ${target_name}
             POST_BUILD
+            COMMAND arm-none-eabi-size ${target_name}
             # fromelf to hex
             COMMAND fromelf --i32combined --output=${target_name}.hex ${target_name}
             # and append the softdevice hex file
