@@ -18,7 +18,15 @@ LR_IROM1 0x1C000 0x0024000  {
    *(InRoot$$Sections)
    .ANY (+RO)
   }
-  RW_IRAM1 0x20002800 0x00001800  {
+
+  ; Memory for global objects starting at offset 10K (reserved by softdevice). Note: we don't provide a size limit for it.
+  RW_IRAM1 0x20002800 {
    .ANY (+RW +ZI)
   }
+
+  ; Place the heap before the stack and have it fill all available space between the end of global objects and stack.
+  ARM_LIB_HEAP AlignExpr(+0, 8) ALIGN 8 EMPTY (0x20003800 - AlignExpr(ImageLimit(RW_IRAM1),8)) {}
+
+  ; Place the stack at the high end of the memory, and give it a size of 2K.
+  ARM_LIB_STACK 0x20003800 EMPTY 0x0800 {}
 }
