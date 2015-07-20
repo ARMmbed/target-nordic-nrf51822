@@ -29,8 +29,6 @@ set(NRF51822_SOFTDEVICE_HEX_FILE "${CMAKE_CURRENT_LIST_DIR}/../softdevice/s130_n
 # pre-built softdevice:
 function(yotta_apply_target_rules target_type target_name)
     if(${target_type} STREQUAL "EXECUTABLE")
-        # !!! FIXME: is there an armcc toolchain command that can be used to
-        # do this? (instead of needing binutils' objcopy)
         add_custom_command(TARGET ${target_name}
             POST_BUILD
             COMMAND arm-none-eabi-size ${target_name}
