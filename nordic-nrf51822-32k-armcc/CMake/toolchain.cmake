@@ -1,16 +1,16 @@
 # Copyright (C) 2014-2015 ARM Limited. All rights reserved.
 
-if(TARGET_NORDIC_NRF51822_16K_ARMCC_TOOLCHAIN_INCLUDED)
+if(TARGET_NORDIC_NRF51822_32K_ARMCC_TOOLCHAIN_INCLUDED)
     return()
 endif()
-set(TARGET_NORDIC_NRF51822_16K_ARMCC_TOOLCHAIN_INCLUDED 1)
+set(TARGET_NORDIC_NRF51822_32K_ARMCC_TOOLCHAIN_INCLUDED 1)
 
 # legacy definitions for building mbed 2.0 modules with a retrofitted build
 # system:
-set(MBED_LEGACY_TARGET_DEFINITIONS "NORDIC" "NRF51822_MKIT" "MCU_NRF51822" "MCU_NORDIC_16K")
+set(MBED_LEGACY_TARGET_DEFINITIONS "NORDIC" "NRF51822_MKIT" "MCU_NRF51822" "MCU_NORDIC_32K")
 # provide compatibility definitions for compiling with this target: these are
 # definitions that legacy code assumes will be defined.
-add_definitions("-DNRF51 -DTARGET_NORDIC -DTARGET_M0 -D__MBED__=1 -DMCU_NORDIC_16K -DTARGET_NRF51822 -DTARGET_MCU_NORDIC_16K -D__CORTEX_M0 -DARM_MATH_CM0")
+add_definitions("-DNRF51 -DTARGET_NORDIC -DTARGET_M0 -D__MBED__=1 -DMCU_NORDIC_32K -DTARGET_NRF51822 -DTARGET_MCU_NORDIC_32K -D__CORTEX_M0 -DARM_MATH_CM0")
 
 # append non-generic flags, and set NRF51822-specific link script
 set(_CPU_COMPILATION_OPTIONS "--CPU=Cortex-M0 -D__thumb2__")
