@@ -18,7 +18,12 @@
     "nordic",
     "gcc"
   ],
-  "config": {},
+  "config": {
+    "minar": {
+      "initial_event_pool_size"    : 4,
+      "additional_event_pools_size": 4
+    }
+  },
   "similarTo": [
     "nrf51822",
     "nrf",
