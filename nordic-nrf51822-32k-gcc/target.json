@@ -1,6 +1,6 @@
 {
   "name": "nordic-nrf51822-32k-gcc",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Official mbed build target for the nrf51822 32KB chip.",
   "licenses": [
     {
@@ -20,7 +20,7 @@
   ],
   "config": {
     "minar": {
-      "initial_event_pool_size"    : 4,
+      "initial_event_pool_size": 4,
       "additional_event_pools_size": 4
     }
   },
