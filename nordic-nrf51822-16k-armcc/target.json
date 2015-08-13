@@ -1,6 +1,6 @@
 {
   "name": "nordic-nrf51822-16k-armcc",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Official mbed build target for the mbed nrf51822 development board, using the armcc toolchain.",
   "licenses": [
     {
@@ -19,7 +19,7 @@
     "armcc"
   ],
   "config": {
-    "mbed-os" : true,
+    "mbed-os": true,
     "minar": {
       "initial_event_pool_size": 4,
       "additional_event_pools_size": 4
