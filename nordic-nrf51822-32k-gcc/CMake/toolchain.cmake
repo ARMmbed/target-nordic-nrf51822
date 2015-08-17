@@ -23,6 +23,7 @@ set(CMAKE_EXE_LINKER_FLAGS_INIT    "${CMAKE_EXE_LINKER_FLAGS_INIT} -mcpu=cortex-
 
 # used by the apply_target_rules function below:
 set(NRF51822_SOFTDEVICE_HEX_FILE "${CMAKE_CURRENT_LIST_DIR}/../softdevice/s130_nrf51_1.0.0_softdevice.hex")
+set(NRF51822_MERGE_HEX_SCRIPT "${CMAKE_CURRENT_LIST_DIR}/../scripts/merge_hex.py")
 
 # define a function for yotta to apply target-specific rules to build products,
 # in our case we need to convert the built elf file to .hex, and add the
@@ -34,7 +35,7 @@ function(yotta_apply_target_rules target_type target_name)
             # objcopy to hex
             COMMAND arm-none-eabi-objcopy -O ihex ${target_name} ${target_name}.hex
             # and append the softdevice hex file
-            COMMAND srec_cat ${NRF51822_SOFTDEVICE_HEX_FILE} -intel ${target_name}.hex -intel -o ${target_name}-combined.hex -intel --line-length=44
+            COMMAND python ${NRF51822_MERGE_HEX_SCRIPT} ${NRF51822_SOFTDEVICE_HEX_FILE} ${target_name}.hex ${target_name}-combined.hex
             COMMENT "hexifying and adding softdevice to ${target_name}"
             VERBATIM
         )
