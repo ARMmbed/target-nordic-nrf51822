@@ -10,9 +10,10 @@ fail_color = ''
 
 # If colorama is present, set the fail color to red
 try:
-    from colorama import init, Fore
+    from colorama import init, deinit, Fore
     fail_color = Fore.RED
-
+except:
+    pass
 
 def fail(message):
     print(fail_color + message)
