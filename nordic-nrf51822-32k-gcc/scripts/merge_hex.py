@@ -6,19 +6,40 @@
 
 import sys
 
+fail_color = ''
+
+# If colorama is present, set the fail color to red
+try:
+    from colorama import init, Fore
+    fail_color = Fore.RED
+
+
+def fail(message):
+    print(fail_color + message)
+
+    # If we've included ANSI color in output, reset the output style
+    if fail_color:
+        print(Fore.RESET)
+        deinit()
+
+    return 1
+
 def main(arguments):
+    # If using ANSI coloring is available, initialize colorama
+    if fail_color:
+        init()
+
+    # Import intelhex if avaialable, otherwise fail
     try:
         from intelhex import IntelHex
     except:
-        fail_color = '\033[91m'
-        print(fail_color + 'error: You do not have \'intelhex\' installed. Please run \'pip install intelhex\' then retry.')
-        return 1
+        return fail('error: You do not have \'intelhex\' installed. Please run \'pip install intelhex\' then retry.')
 
+    # Ensure the right number of arguments are supplied
     if not len(arguments) == 3:
-        print(fail_color + 'error: Improper use of merge_hex.py.')
-	print(fail_color + 'USAGE: merge_hex.py input_file1 input_file2 output_file.')
-        return 1
+        return fail('error: Improper use of merge_hex.py.\nUSAGE: merge_hex.py input_file1 input_file2 output_file.')
 
+    # Get the two hex files, merge them, and save the result
     orig = IntelHex(arguments[0])
     new = IntelHex(arguments[1])
     orig.merge(new, overlap='replace')
