@@ -1,6 +1,6 @@
 {
   "name": "nordic-nrf51822-32k-armcc",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Official mbed build target for the mbed nrf51822 development board, using the armcc toolchain.",
   "homepage": "https://github.com/ARMmbed/target-nrf51822",
   "repository": {
@@ -29,10 +29,10 @@
       "initial_event_pool_size": 4,
       "additional_event_pools_size": 4
     },
-    "chip":{
-        "nrf51822": {
-            "32k": true
-        }
+    "chip": {
+      "nrf51822": {
+        "32k": true
+      }
     }
   },
   "similarTo": [
