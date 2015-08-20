@@ -25,6 +25,11 @@ def fail(message):
 
     return 1
 
+def convert_start_addr(hex_file):
+    if hex_file.start_addr and 'CS' in hex_file.start_addr:
+        start_addr = {'EIP': (hex_file.start_addr['CS'] * 16) + hex_file.start_addr['IP']}
+        hex_file.start_addr = start_addr
+
 def main(arguments):
     # If using ANSI coloring is available, initialize colorama
     if fail_color:
@@ -42,7 +47,11 @@ def main(arguments):
 
     # Get the two hex files, merge them, and save the result
     orig = IntelHex(arguments[0])
+    convert_start_addr(orig)    
+
     new = IntelHex(arguments[1])
+    convert_start_addr(new)
+    
     orig.merge(new, overlap='replace')
     orig.write_hex_file(arguments[2])
 
