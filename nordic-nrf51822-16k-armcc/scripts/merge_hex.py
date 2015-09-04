@@ -1,5 +1,19 @@
 #!/usr/bin/env python
 
+# Copyright (c) 2015 ARM Limited
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """This script will merge two hex files and write the output to a hex file.
    USAGE: merge_hex.py input_file1 input_file2 output_file.
 """
@@ -47,11 +61,11 @@ def main(arguments):
 
     # Get the two hex files, merge them, and save the result
     orig = IntelHex(arguments[0])
-    convert_start_addr(orig)    
+    convert_start_addr(orig)
 
     new = IntelHex(arguments[1])
     convert_start_addr(new)
-    
+
     orig.merge(new, overlap='replace')
     orig.write_hex_file(arguments[2])
 

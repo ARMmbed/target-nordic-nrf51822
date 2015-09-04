@@ -1,4 +1,16 @@
-# Copyright (C) 2014-2015 ARM Limited. All rights reserved.
+# Copyright (c) 2015 ARM Limited
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
 if(TARGET_NORDIC_NRF51822_16K_ARMCC_TOOLCHAIN_INCLUDED)
     return()
@@ -36,7 +48,7 @@ function(yotta_apply_target_rules target_type target_name)
             # fromelf to hex
             COMMAND fromelf --i32combined --output=${target_name}.hex ${target_name}
             # and append the softdevice hex file
-            COMMAND python ${NRF51822_MERGE_HEX_SCRIPT} ${NRF51822_SOFTDEVICE_HEX_FILE} ${target_name}.hex ${target_name}-combined.hex            
+            COMMAND python ${NRF51822_MERGE_HEX_SCRIPT} ${NRF51822_SOFTDEVICE_HEX_FILE} ${target_name}.hex ${target_name}-combined.hex
             COMMAND srec_info ${target_name}-combined.hex -intel
             COMMENT "hexifying and adding softdevice to ${target_name}"
             VERBATIM
