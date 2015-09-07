@@ -43,6 +43,7 @@
     "armv6-m"
   ],
   "toolchain": "CMake/toolchain.cmake",
+  "private" : true,
   "scripts": {
     "debug": [
       "valinor",
