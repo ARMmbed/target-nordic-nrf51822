@@ -48,8 +48,7 @@ function(yotta_apply_target_rules target_type target_name)
             # fromelf to hex
             COMMAND fromelf --i32combined --output=${target_name}.hex ${target_name}
             # and append the softdevice hex file
-            COMMAND python ${NRF51822_MERGE_HEX_SCRIPT} ${NRF51822_SOFTDEVICE_HEX_FILE} ${target_name}.hex ${target_name}-combined.hex            
-            COMMAND srec_info ${target_name}-combined.hex -intel
+            COMMAND python ${NRF51822_MERGE_HEX_SCRIPT} ${NRF51822_SOFTDEVICE_HEX_FILE} ${target_name}.hex ${target_name}-combined.hex
             COMMENT "hexifying and adding softdevice to ${target_name}"
             VERBATIM
         )
