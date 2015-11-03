@@ -11,6 +11,12 @@
     {
       "url": "https://spdx.org/licenses/Apache-2.0",
       "type": "Apache-2.0"
+    },
+    {
+      "type": "LicenseRef-BSD-3clause-Nordic.txt"
+    },
+    {
+      "type": "LicenseRef-s130_nrf51822_1.0.0_licence_agreement.txt"
     }
   ],
   "inherits": {
