@@ -17,23 +17,28 @@ if(TARGET_NORDIC_NRF51822_32K_ARMCC_TOOLCHAIN_INCLUDED)
 endif()
 set(TARGET_NORDIC_NRF51822_32K_ARMCC_TOOLCHAIN_INCLUDED 1)
 
+# Set S130 as the default SoftDevice if not defined through yotta config
+if(NOT YOTTA_CFG_NORDIC_SOFTDEVICE)
+    set(YOTTA_CFG_NORDIC_SOFTDEVICE "S130")
+endif()
+
 # legacy definitions for building mbed 2.0 modules with a retrofitted build
 # system:
 set(MBED_LEGACY_TARGET_DEFINITIONS "NORDIC" "NRF51822_MKIT" "MCU_NRF51822" "MCU_NORDIC_32K")
-if(YOTTA_CFG_NORDIC_SOFTDEVICE_S110)
-    set(MBED_LEGACY_TARGET_DEFINITIONS   ${MBED_LEGACY_TARGET_DEFINITIONS} "MCU_NRF51" "MCU_NRF51_32K" "MCU_NORDIC_32K_S110")
-    set(NRF51822_LINKER_FLAGS_FILE_PATH  "${CMAKE_CURRENT_LIST_DIR}/../ld/nRF51822_S110.sct")
-    set(NRF51822_SOFTDEVICE_FILE_PATH    "${CMAKE_CURRENT_LIST_DIR}/../softdevice/s110_nrf51822_8.0.0_softdevice.hex")
-else()
-    set(NRF51822_LINKER_FLAGS_FILE_PATH  "${CMAKE_CURRENT_LIST_DIR}/../ld/nRF51822_S130.sct")
-    set(NRF51822_SOFTDEVICE_FILE_PATH    "${CMAKE_CURRENT_LIST_DIR}/../softdevice/s130_nrf51_1.0.0_softdevice.hex")
-endif()
-
 # provide compatibility definitions for compiling with this target: these are
 # definitions that legacy code assumes will be defined.
 add_definitions("-DNRF51 -DTARGET_NORDIC -DTARGET_M0 -D__MBED__=1 -DMCU_NORDIC_32K -DTARGET_NRF51822 -DTARGET_MCU_NORDIC_32K -D__CORTEX_M0 -DARM_MATH_CM0")
-if(YOTTA_CFG_NORDIC_SOFTDEVICE_S110)
+
+if(YOTTA_CFG_NORDIC_SOFTDEVICE STREQUAL "S110")
     add_definitions("-DTARGET_MCU_NRF51_32K -DTARGET_MCU_NRF51_32K_S110")
+    set(MBED_LEGACY_TARGET_DEFINITIONS   ${MBED_LEGACY_TARGET_DEFINITIONS} "MCU_NRF51" "MCU_NRF51_32K" "MCU_NORDIC_32K_S110")
+    set(NRF51822_LINKER_FLAGS_FILE_PATH  "${CMAKE_CURRENT_LIST_DIR}/../ld/nRF51822_S110.sct")
+    set(NRF51822_SOFTDEVICE_FILE_PATH    "${CMAKE_CURRENT_LIST_DIR}/../softdevice/s110_nrf51822_8.0.0_softdevice.hex")
+elseif(YOTTA_CFG_NORDIC_SOFTDEVICE STREQUAL "S130")
+    set(NRF51822_LINKER_FLAGS_FILE_PATH  "${CMAKE_CURRENT_LIST_DIR}/../ld/nRF51822_S130.sct")
+    set(NRF51822_SOFTDEVICE_FILE_PATH    "${CMAKE_CURRENT_LIST_DIR}/../softdevice/s130_nrf51_1.0.0_softdevice.hex")
+else()
+    message(FATAL_ERROR "SoftDevice version '${YOTTA_CFG_NORDIC_SOFTDEVICE}' is not recognized. Please check your yotta config file.")
 endif()
 
 # append non-generic flags, and set NRF51822-specific link script
