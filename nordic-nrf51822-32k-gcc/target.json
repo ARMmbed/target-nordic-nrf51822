@@ -39,6 +39,13 @@
       "nrf51822": {
         "32k": true
       }
+    },
+    "hardware": {
+      "clocks": {
+        "nrf": {
+          "lfclk_src": 1
+        }
+      }
     }
   },
   "similarTo": [
