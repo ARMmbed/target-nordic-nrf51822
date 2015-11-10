@@ -1,6 +1,6 @@
 {
   "name": "nordic-nrf51822-32k-gcc",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "Official mbed build target for the nrf51822 32KB chip.",
   "homepage": "https://github.com/ARMmbed/target-nrf51822",
   "repository": {
