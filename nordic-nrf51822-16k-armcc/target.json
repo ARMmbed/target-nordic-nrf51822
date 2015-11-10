@@ -1,6 +1,6 @@
 {
   "name": "nordic-nrf51822-16k-armcc",
-  "version": "0.0.14",
+  "version": "0.0.13",
   "description": "Official mbed build target for the mbed nrf51822 development board, using the armcc toolchain.",
   "homepage": "https://github.com/ARMmbed/target-nrf51822",
   "repository": {
@@ -16,7 +16,7 @@
       "type": "LicenseRef-BSD-3clause-Nordic.txt"
     },
     {
-      "type": "LicenseRef-s130_nrf51822_1.0.0_licence_agreement.txt"
+      "type": "LicenseRef-softdevice_nrf51822_licence_agreement.txt"
     }
   ],
   "inherits": {
@@ -38,6 +38,13 @@
     "chip": {
       "nrf51822": {
         "16k": true
+      }
+    },
+    "hardware": {
+      "clocks": {
+        "nrf": {
+          "lfclk_src": 1
+        }
       }
     }
   },

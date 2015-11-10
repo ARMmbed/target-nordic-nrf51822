@@ -17,12 +17,29 @@ if(TARGET_NORDIC_NRF51822_16K_GCC_TOOLCHAIN_INCLUDED)
 endif()
 set(TARGET_NORDIC_NRF51822_16K_GCC_TOOLCHAIN_INCLUDED 1)
 
+# Set S130 as the default SoftDevice if not defined through yotta config
+if(NOT YOTTA_CFG_NORDIC_SOFTDEVICE)
+    set(YOTTA_CFG_NORDIC_SOFTDEVICE "S130")
+endif()
+
 # legacy definitions for building mbed 2.0 modules with a retrofitted build
 # system:
 set(MBED_LEGACY_TARGET_DEFINITIONS "NORDIC" "NRF51822_MKIT" "MCU_NRF51822" "MCU_NORDIC_16K")
 # provide compatibility definitions for compiling with this target: these are
-# definitions that legacy code assumes will be defined. 
+# definitions that legacy code assumes will be defined.
 add_definitions("-DNRF51 -DTARGET_NORDIC -DTARGET_M0 -D__MBED__=1 -DMCU_NORDIC_16K -DTARGET_NRF51822 -DTARGET_MCU_NORDIC_16K")
+
+if(YOTTA_CFG_NORDIC_SOFTDEVICE STREQUAL "S110")
+    add_definitions("-DTARGET_MCU_NRF51_16K -DTARGET_MCU_NRF51_16K_S110")
+    set(MBED_LEGACY_TARGET_DEFINITIONS   ${MBED_LEGACY_TARGET_DEFINITIONS} "MCU_NRF51" "MCU_NRF51_16K" "MCU_NORDIC_16K_S110")
+    set(NRF51822_LINKER_FLAGS_FILE_PATH  "${CMAKE_CURRENT_LIST_DIR}/../ld/NRF51822_S110.ld")
+    set(NRF51822_SOFTDEVICE_FILE_PATH    "${CMAKE_CURRENT_LIST_DIR}/../softdevice/s110_nrf51822_8.0.0_softdevice.hex")
+elseif(YOTTA_CFG_NORDIC_SOFTDEVICE STREQUAL "S130")
+    set(NRF51822_LINKER_FLAGS_FILE_PATH  "${CMAKE_CURRENT_LIST_DIR}/../ld/NRF51822_S130.ld")
+    set(NRF51822_SOFTDEVICE_FILE_PATH    "${CMAKE_CURRENT_LIST_DIR}/../softdevice/s130_nrf51_1.0.0_softdevice.hex")
+else()
+    message(FATAL_ERROR "SoftDevice version '${YOTTA_CFG_NORDIC_SOFTDEVICE}' is not recognized. Please check your yotta config file.")
+endif()
 
 # append non-generic flags, and set NRF51822-specific link script
 set(_CPU_COMPILATION_OPTIONS "-mcpu=cortex-m0 -mthumb -D__thumb2__")
@@ -31,11 +48,11 @@ set(CMAKE_C_FLAGS_INIT             "${CMAKE_C_FLAGS_INIT} ${_CPU_COMPILATION_OPT
 set(CMAKE_ASM_FLAGS_INIT           "${CMAKE_ASM_FLAGS_INIT} ${_CPU_COMPILATION_OPTIONS}")
 set(CMAKE_CXX_FLAGS_INIT           "${CMAKE_CXX_FLAGS_INIT} ${_CPU_COMPILATION_OPTIONS}")
 set(CMAKE_MODULE_LINKER_FLAGS_INIT "${CMAKE_MODULE_LINKER_FLAGS_INIT} -mcpu=cortex-m0 -mthumb")
-set(CMAKE_EXE_LINKER_FLAGS_INIT    "${CMAKE_EXE_LINKER_FLAGS_INIT} -mcpu=cortex-m0 -mthumb -T\"${CMAKE_CURRENT_LIST_DIR}/../ld/NRF51822.ld\"")
+set(CMAKE_EXE_LINKER_FLAGS_INIT    "${CMAKE_EXE_LINKER_FLAGS_INIT} -mcpu=cortex-m0 -mthumb -T\"${NRF51822_LINKER_FLAGS_FILE_PATH}\"")
 
 # used by the apply_target_rules function below:
-set(NRF51822_SOFTDEVICE_HEX_FILE "${CMAKE_CURRENT_LIST_DIR}/../softdevice/s130_nrf51_1.0.0_softdevice.hex")
-set(NRF51822_MERGE_HEX_SCRIPT "${CMAKE_CURRENT_LIST_DIR}/../scripts/merge_hex.py")
+set(NRF51822_SOFTDEVICE_HEX_FILE "${NRF51822_SOFTDEVICE_FILE_PATH}")
+set(NRF51822_MERGE_HEX_SCRIPT    "${CMAKE_CURRENT_LIST_DIR}/../scripts/merge_hex.py")
 
 # define a function for yotta to apply target-specific rules to build products,
 # in our case we need to convert the built elf file to .hex, and add the
