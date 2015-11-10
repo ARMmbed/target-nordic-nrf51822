@@ -1,8 +1,8 @@
 Many of the files in this module have been inherited from the Nordic SDK for
 nRF51822.  With the exception of the softdevice they come with a BSD license 
 offered by Nordic for use in mbed.  The Nordic Semiconductor ASA Softdevice
-License Agreement applies to the softdevice.  Nordic Semiconductor has 
-granted ARM permission to redistribute the SoftDevice with mbed.
+License Agreement, a BSD-like licence for binary distributions, applies to 
+the softdevice. 
 Some other files come from the mbed SDK, and are licensed under Apache-2.0.
 Unless specifically indicated otherwise in a file, files are licensed
 under the Apache 2.0 license, as can be found in: apache-2.0.txt.
