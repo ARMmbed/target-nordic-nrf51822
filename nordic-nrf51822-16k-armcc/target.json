@@ -46,6 +46,11 @@
           "lfclk_src": 1
         }
       }
+    },
+    "cmsis": {
+      "nvic": {
+        "has_custom_vtor": true
+      }
     }
   },
   "similarTo": [
