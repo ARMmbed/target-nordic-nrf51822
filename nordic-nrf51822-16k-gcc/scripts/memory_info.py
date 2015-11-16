@@ -80,9 +80,7 @@ def main(arguments):
                 if match.group('section') == 'heap' and WARNING_THRESHOLD > int(match.group('size')):
                     warnings_list.append(warning('Available heap < {0} bytes'.format(WARNING_THRESHOLD)))
                 break
-        if len(compiled_patterns) == 0:
-            break
-    print('\n'.join(warnings_list))
+    print(os.linesep.join(warnings_list))
 
 if __name__ == '__main__':
     sys.exit(main(sys.argv[1:]))
