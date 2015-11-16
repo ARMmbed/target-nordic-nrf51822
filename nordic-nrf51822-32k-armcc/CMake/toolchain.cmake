@@ -53,6 +53,7 @@ set(CMAKE_EXE_LINKER_FLAGS_INIT    "${CMAKE_EXE_LINKER_FLAGS_INIT} --info=totals
 # used by the apply_target_rules function below:
 set(NRF51822_SOFTDEVICE_HEX_FILE "${NRF51822_SOFTDEVICE_FILE_PATH}")
 set(NRF51822_MERGE_HEX_SCRIPT    "${CMAKE_CURRENT_LIST_DIR}/../scripts/merge_hex.py")
+set(NRF51822_MEMORY_INFO_SCRIPT  "${CMAKE_CURRENT_LIST_DIR}/../scripts/memory_info.py")
 
 # define a function for yotta to apply target-specific rules to build products,
 # in our case we need to convert the built elf file to .hex, and add the
@@ -67,6 +68,9 @@ function(yotta_apply_target_rules target_type target_name)
             # and append the softdevice hex file
             COMMAND python ${NRF51822_MERGE_HEX_SCRIPT} ${NRF51822_SOFTDEVICE_HEX_FILE} ${target_name}.hex ${target_name}-combined.hex
             COMMENT "hexifying and adding softdevice to ${target_name}"
+            # printing memory usage information
+            COMMAND python ${NRF51822_MEMORY_INFO_SCRIPT} ${target_name}
+            COMMENT "printing memory usage information"
             VERBATIM
         )
     endif()
