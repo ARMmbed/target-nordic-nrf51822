@@ -1,6 +1,6 @@
 {
   "name": "nordic-nrf51822-16k-armcc",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Official mbed build target for the mbed nrf51822 development board, using the armcc toolchain.",
   "homepage": "https://github.com/ARMmbed/target-nrf51822",
   "repository": {
