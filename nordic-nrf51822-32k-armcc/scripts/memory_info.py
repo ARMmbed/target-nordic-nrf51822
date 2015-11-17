@@ -2,7 +2,7 @@
 
 """This script reads the map file generated after the build process and prints
    memory layout information of an nRF51 application.
-   USAGE: mem_report.py exec_filepath
+   USAGE: memory_info.py exec_filepath heap_warning_threshold
 """
 
 import sys
@@ -11,7 +11,6 @@ import re
 import subprocess
 from distutils import spawn
 
-WARNING_THRESHOLD = 1024
 ARM_SIZE_UTILITY  = 'arm-none-eabi-size'
 
 fail_color    = ''
@@ -56,9 +55,16 @@ def main(arguments):
         init()
 
     # Ensure the right number of arguments are supplied
-    if len(arguments) != 1:
-        return fail('Improper use of mem_report.py.\nUSAGE: mem_report.py exec_filepath')
-    exec_filepath = arguments[0]
+    if len(arguments) != 2:
+        return fail('Improper use of memory_info.py.\nUSAGE: memory_info.py exec_filepath heap_warning_threshold.')
+    exec_filepath     = arguments[0]
+    warning_threshold = 0
+    try:
+        warning_threshold = int(arguments[1])
+        if warning_threshold < 0:
+            return fail('Second argument of memory_info.py must be a positive integer. Found \'{0}\'.'.format(arguments[1]))
+    except ValueError:
+        return fail('Second argument of memory_info.py must be a positive integer. Found \'{0}\'.'.format(arguments[1]))
 
     # Test if required utility exists
     if not spawn.find_executable(ARM_SIZE_UTILITY):
@@ -67,18 +73,18 @@ def main(arguments):
 
     # Execute arm-none-eabi-size and get output
     process = subprocess.Popen([ARM_SIZE_UTILITY, '-A', exec_filepath], stdout=subprocess.PIPE)
-    stdout  = process.communicate()[0].strip()
+    input   = process.communicate()[0].strip()
 
     # Process output to remove memory addresses and print warnings when heap is low
     warnings_list = []
     print('Memory usage for \'{0}\''.format(exec_filepath))
-    for line in stdout.split(os.linesep):
+    for line in input.split(os.linesep):
         for index, pattern in enumerate(compiled_patterns):
             match = re.match(pattern, line)
             if match:
                 print(match.group('useful_info'))
-                if match.group('section') == 'heap' and WARNING_THRESHOLD > int(match.group('size')):
-                    warnings_list.append(warning('Available heap < {0} bytes'.format(WARNING_THRESHOLD)))
+                if match.group('section') == 'heap' and warning_threshold > int(match.group('size')):
+                    warnings_list.append(warning('Available heap < {0} bytes.'.format(warning_threshold)))
                 break
     print(os.linesep.join(warnings_list))
 
