@@ -105,7 +105,7 @@ function(yotta_apply_target_rules target_type target_name)
         add_custom_command(TARGET ${target_name}
             POST_BUILD
             # printing memory usage information
-            COMMAND python ${NRF51822_MEMORY_INFO_SCRIPT} ${target_name} ${NRF51822_HEAP_WARNING_THRESHOLD}
+            COMMAND python ${NRF51822_MEMORY_INFO_SCRIPT} ${target_name} ${YOTTA_CFG_IMAGE_HEAP_WARNING_THRESHOLD}
             COMMENT "printing memory usage information"
             VERBATIM
         )
