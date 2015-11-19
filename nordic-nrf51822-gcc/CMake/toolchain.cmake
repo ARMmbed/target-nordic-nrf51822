@@ -18,17 +18,17 @@ endif()
 set(TARGET_NORDIC_NRF51822_GCC_TOOLCHAIN_INCLUDED 1)
 
 # If the memory size has not been defined then default to 16K and print a warning
-# if both 16K and 32K have been defined then abort the build process
-if(NOT YOTTA_CFG_CHIP_NRF51822_16K AND NOT YOTTA_CFG_CHIP_NRF51822_32K)
-    message(WARNING "No definition of YOTTA_CFG_CHIP_NRF51822_16K or YOTTA_CFG_CHIP_NRF51822_32K found, building image for default 16K target.")
-    set(YOTTA_CFG_CHIP_NRF51822_16K TRUE)
-    set(NRF51822_RAM_SIZE           "16K")
-elseif(YOTTA_CFG_CHIP_NRF51822_16K AND YOTTA_CFG_CHIP_NRF51822_32K)
-    message(FATAL_ERROR "Cannot build image for both 16K and 32K targets. Please modify your yotta config to undefine either YOTTA_CFG_CHIP_NRF51822_16K or YOTTA_CFG_CHIP_NRF51822_32K.")
-elseif(YOTTA_CFG_CHIP_NRF51822_16K)
-    set(NRF51822_RAM_SIZE "16K")
+# otherwise ensure that the string is uppercase to build the macro definitions correctly
+if(NOT YOTTA_CFG_NRF51822_RAM_SIZE)
+    message(WARNING "No definition of YOTTA_CFG_NRF51822_RAM_SIZE found, building image for default 16K target.")
+    set(YOTTA_CFG_NRF51822_RAM_SIZE "16K")
 else()
-    set(NRF51822_RAM_SIZE "32K")
+    # Ensure that the string is uppercase to build the macro definitions correctly
+    string(TOUPPER "${YOTTA_CFG_NRF51822_RAM_SIZE}" YOTTA_CFG_NRF51822_RAM_SIZE)
+    if(NOT (YOTTA_CFG_NRF51822_RAM_SIZE STREQUAL "16K") AND NOT (YOTTA_CFG_NRF51822_RAM_SIZE STREQUAL "16K"))
+        # Fail if the RAM size is not supported
+        message(FATAL_ERROR "Cannot build image for target with RAM size '${YOTTA_CFG_NRF51822_RAM_SIZE}'. Please modify your yotta config to set YOTTA_CFG_NRF51822_RAM_SIZE a supported option.\nSupported RAM sizes: '16K' (default), '32K'.")
+    endif()
 endif()
 
 # Set S130 as the default SoftDevice if not defined through yotta config
@@ -48,18 +48,18 @@ endif()
 
 # legacy definitions for building mbed 2.0 modules with a retrofitted build
 # system:
-set(MBED_LEGACY_TARGET_DEFINITIONS "NORDIC" "NRF51822_MKIT" "MCU_NRF51822" "MCU_NORDIC_${NRF51822_RAM_SIZE}")
+set(MBED_LEGACY_TARGET_DEFINITIONS "NORDIC" "NRF51822_MKIT" "MCU_NRF51822" "MCU_NORDIC_${YOTTA_CFG_NRF51822_RAM_SIZE}")
 # provide compatibility definitions for compiling with this target: these are
 # definitions that legacy code assumes will be defined.
-add_definitions("-DNRF51 -DTARGET_NORDIC -DTARGET_M0 -D__MBED__=1 -DMCU_NORDIC_${NRF51822_RAM_SIZE} -DTARGET_NRF51822 -DTARGET_MCU_NORDIC_${NRF51822_RAM_SIZE}")
+add_definitions("-DNRF51 -DTARGET_NORDIC -DTARGET_M0 -D__MBED__=1 -DMCU_NORDIC_${YOTTA_CFG_NRF51822_RAM_SIZE} -DTARGET_NRF51822 -DTARGET_MCU_NORDIC_${YOTTA_CFG_NRF51822_RAM_SIZE}")
 
 if(YOTTA_CFG_NORDIC_SOFTDEVICE STREQUAL "S110")
-    add_definitions("-DTARGET_MCU_NRF51_${NRF51822_RAM_SIZE} -DTARGET_MCU_NRF51_${NRF51822_RAM_SIZE}_S110")
-    set(MBED_LEGACY_TARGET_DEFINITIONS   ${MBED_LEGACY_TARGET_DEFINITIONS} "MCU_NRF51" "MCU_NRF51_${NRF51822_RAM_SIZE}" "MCU_NORDIC_${NRF51822_RAM_SIZE}_S110")
-    set(NRF51822_LINKER_FLAGS_FILE_PATH  "${CMAKE_CURRENT_LIST_DIR}/../ld/NRF51822_${NRF51822_RAM_SIZE}_S110.ld")
+    add_definitions("-DTARGET_MCU_NRF51_${YOTTA_CFG_NRF51822_RAM_SIZE} -DTARGET_MCU_NRF51_${YOTTA_CFG_NRF51822_RAM_SIZE}_S110")
+    set(MBED_LEGACY_TARGET_DEFINITIONS   ${MBED_LEGACY_TARGET_DEFINITIONS} "MCU_NRF51" "MCU_NRF51_${YOTTA_CFG_NRF51822_RAM_SIZE}" "MCU_NORDIC_${YOTTA_CFG_NRF51822_RAM_SIZE}_S110")
+    set(NRF51822_LINKER_FLAGS_FILE_PATH  "${CMAKE_CURRENT_LIST_DIR}/../ld/NRF51822_${YOTTA_CFG_NRF51822_RAM_SIZE}_S110.ld")
     set(NRF51822_SOFTDEVICE_FILE_PATH    "${CMAKE_CURRENT_LIST_DIR}/../softdevice/s110_nrf51822_8.0.0_softdevice.hex")
 elseif(YOTTA_CFG_NORDIC_SOFTDEVICE STREQUAL "S130")
-    set(NRF51822_LINKER_FLAGS_FILE_PATH  "${CMAKE_CURRENT_LIST_DIR}/../ld/NRF51822_${NRF51822_RAM_SIZE}_S130.ld")
+    set(NRF51822_LINKER_FLAGS_FILE_PATH  "${CMAKE_CURRENT_LIST_DIR}/../ld/NRF51822_${YOTTA_CFG_NRF51822_RAM_SIZE}_S130.ld")
     set(NRF51822_SOFTDEVICE_FILE_PATH    "${CMAKE_CURRENT_LIST_DIR}/../softdevice/s130_nrf51_1.0.0_softdevice.hex")
 else()
     message(FATAL_ERROR "SoftDevice version '${YOTTA_CFG_NORDIC_SOFTDEVICE}' is not recognized. Please check your yotta config file.")
