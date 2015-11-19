@@ -85,21 +85,26 @@ set(NRF51822_MEMORY_INFO_SCRIPT  "${CMAKE_CURRENT_LIST_DIR}/../scripts/memory_in
 # pre-built softdevice:
 function(yotta_apply_target_rules target_type target_name)
     if(${target_type} STREQUAL "EXECUTABLE")
-        add_custom_command(OUTPUT ${target_name}.hex ${target_name}-combined.hex
-            DEPENDS ${target_name}
-            # objcopy to hex
-            COMMAND arm-none-eabi-objcopy -O ihex ${target_name} ${target_name}.hex
-            # and append the softdevice hex file
-            COMMAND python ${NRF51822_MERGE_HEX_SCRIPT} ${NRF51822_SOFTDEVICE_HEX_FILE} ${target_name}.hex ${target_name}-combined.hex
-            COMMENT "hexifying and adding softdevice to ${target_name}"
-            VERBATIM
-        )
         if(YOTTA_CFG_IMAGE_FOTA)
-            add_custom_command(OUTPUT ${target_name}-combined-fota.hex
-                DEPENDS ${target_name}.hex
+            add_custom_command(TARGET ${target_name}
+                POST_BUILD
+                # objcopy to hex
+                COMMAND arm-none-eabi-objcopy -O ihex ${target_name} ${target_name}.hex
+                # and append the softdevice hex file
+                COMMAND python ${NRF51822_MERGE_HEX_SCRIPT} ${NRF51822_SOFTDEVICE_HEX_FILE} ${target_name}.hex ${target_name}-combined.hex
                 # append the softdevice and bootloader hex file
-                COMMAND srec_cat ${NRF51822_SOFTDEVICE_HEX_FILE} -intel ${target_name}.hex -intel ${NRF51822_BOOTLOADER_HEX_FILE} -intel -exclude  0x3FC00 0x3FC20 -generate 0x3FC00 0x3FC04 -constant_little_endian 0x01 4 -generate 0x3FC04 0x3FC08 -constant_little_endian 0x00 4 -generate 0x3FC08 0x3FC0C -constant_little_endian 0xFE 4 -generate 0x3FC0C 0x3FC20 -constant 0x00 -o ${target_name}-combined-fota.hex
-                COMMENT "adding softdevice and bootloader to ${target_name}"
+                COMMAND python ${NRF51822_MERGE_HEX_SCRIPT} ${target_name}-combined.hex ${NRF51822_BOOTLOADER_HEX_FILE} ${target_name}-combined-fota.hex
+                COMMENT "hexifying and adding softdevice and bootloader to ${target_name}"
+                VERBATIM
+            )
+        else()
+            add_custom_command(TARGET ${target_name}
+                POST_BUILD
+                # objcopy to hex
+                COMMAND arm-none-eabi-objcopy -O ihex ${target_name} ${target_name}.hex
+                # and append the softdevice hex file
+                COMMAND python ${NRF51822_MERGE_HEX_SCRIPT} ${NRF51822_SOFTDEVICE_HEX_FILE} ${target_name}.hex ${target_name}-combined.hex
+                COMMENT "hexifying and adding softdevice to ${target_name}"
                 VERBATIM
             )
         endif()
