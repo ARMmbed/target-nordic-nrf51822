@@ -1,0 +1,1 @@
+## This folder contains a generic bootloader built from sources from Nordic Semiconductor. For more information, please refer to the [mbed documentation](https://docs.mbed.com/docs/ble-intros/en/latest/FOTA/Bootloader/).
