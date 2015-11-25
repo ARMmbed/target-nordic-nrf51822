@@ -25,7 +25,15 @@ if(NOT YOTTA_CFG_NRF51822_RAM_SIZE)
 else()
     # Ensure that the string is uppercase to build the macro definitions correctly
     string(TOUPPER "${YOTTA_CFG_NRF51822_RAM_SIZE}" YOTTA_CFG_NRF51822_RAM_SIZE)
-    if(NOT (YOTTA_CFG_NRF51822_RAM_SIZE STREQUAL "16K") AND NOT (YOTTA_CFG_NRF51822_RAM_SIZE STREQUAL "16K"))
+    if(YOTTA_CFG_NRF51822_RAM_SIZE STREQUAL "16K")
+        # This has been added for compatibility reasons with mbed-hal-nrf51822-mcu and
+        # should be removed in the future
+        set(YOTTA_CFG_CHIP_NRF51822_16K TRUE)
+    elseif(YOTTA_CFG_NRF51822_RAM_SIZE STREQUAL "32K")
+        # This has been added for compatibility reasons with mbed-hal-nrf51822-mcu
+        # and should be removed in the future
+        set(YOTTA_CFG_CHIP_NRF51822_32K TRUE)
+    else()
         # Fail if the RAM size is not supported
         message(FATAL_ERROR "Cannot build image for target with RAM size '${YOTTA_CFG_NRF51822_RAM_SIZE}'. Please modify your yotta config to set YOTTA_CFG_NRF51822_RAM_SIZE a supported option.\nSupported RAM sizes: '16K' (default), '32K'.")
     endif()
