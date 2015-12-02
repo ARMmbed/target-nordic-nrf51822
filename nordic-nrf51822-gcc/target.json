@@ -30,7 +30,11 @@
     "gcc"
   ],
   "config": {
-    "mbed-os": true,
+    "mbed-os": {
+      "stdio": {
+        "default_baud": 9600
+      }
+    },
     "minar": {
       "initial_event_pool_size": 4,
       "additional_event_pools_size": 4
