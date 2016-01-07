@@ -100,7 +100,7 @@ to enable FOTA then add the following lines inside your `config.json`:
 
 ```
 "image": {
-  "fota": false
+  "fota": true
 }
 ```
 
